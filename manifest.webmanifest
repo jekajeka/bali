@@ -1,0 +1,12 @@
+{
+  "name": "Bali Checklist",
+  "short_name": "Bali",
+  "description": "Чек-лист поездки на Бали (офлайн, галочки сохраняются).",
+  "start_url": "./bali-trip-checklist.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
+  "lang": "ru"
+}
+

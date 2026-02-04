@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f1419">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bali Checklist">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Бали — чек-лист поездки • 8–21 февраля</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243447;
+      --border: #3d5568;
+      --text: #e7e9ea;
+      --muted: #8b98a5;
+      --accent: #1d9bf0;
+      --green: #00ba7c;
+      --orange: #ff7a00;
+      --yellow: #ffad00;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.5rem;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    section h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .day-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .day-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .day-card .date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .day-card .weather {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.4rem 0 0.5rem 0;
+      padding: 0.4rem 0.6rem;
+      background: var(--surface2);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .day-card .weather .weather-icon { font-size: 1.1rem; }
+    .day-card .weather .weather-temp { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--text); }
+    .day-card .weather .weather-desc { flex: 1; }
+    .day-card .cafe {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.35rem 0 0.5rem 0;
+      padding: 0.35rem 0.6rem;
+      background: rgba(0,186,124,0.08);
+      border-radius: 8px;
+      border: 1px solid rgba(0,186,124,0.25);
+    }
+    .day-card .cafe strong { color: var(--green); }
+    .day-card .cafe a { color: var(--accent); text-decoration: none; }
+    .day-card .cafe a:hover { text-decoration: underline; }
+    .day-card .cafe .rating { color: var(--yellow); font-size: 0.8em; }
+    .day-card .cafe-dinner { margin-top: 0.35rem; background: rgba(255,122,0,0.08); border-color: rgba(255,122,0,0.25); }
+    .day-card .cafe-dinner strong { color: var(--orange); }
+    .day-card .cafe .far { font-size: 0.8em; color: var(--muted); }
+    .day-card ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .day-card ul a { color: var(--accent); text-decoration: none; }
+    .day-card ul a:hover { text-decoration: underline; }
+    .day-card li {
+      margin-bottom: 0.35rem;
+    }
+    .day-card li:last-child { margin-bottom: 0; }
+    label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+      margin-bottom: 0.4rem;
+    }
+    label:last-child { margin-bottom: 0; }
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+    input[type="checkbox"]:checked + span {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      margin-left: 0.35rem;
+    }
+    .tag.bjj { background: #1d9bf022; color: var(--accent); }
+    .tag.surf { background: #00ba7c22; color: var(--green); }
+    .tag.recovery { background: #ffad0022; color: var(--yellow); }
+    .tag.rest { background: #8b98a522; color: var(--muted); }
+    .tag.travel { background: #ff7a0022; color: var(--orange); }
+    .gym-list, .recovery-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .gym-item, .recovery-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+    .gym-item h4, .recovery-item h4 {
+      margin: 0 0 0.35rem 0;
+      font-size: 1rem;
+    }
+    .gym-item p, .recovery-item p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .gym-item a, .recovery-item a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .gym-item a:hover, .recovery-item a:hover { text-decoration: underline; }
+    .pharmacy-list { list-style: none; padding: 0; margin: 0; }
+    .pharmacy-list li { margin-bottom: 0.6rem; }
+    .pharmacy-list li:last-child { margin-bottom: 0; }
+    .packing-list li { margin-bottom: 0.5rem; }
+    .packing-list li:last-child { margin-bottom: 0; }
+    .room-products {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .room-products h4 { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.5rem 0; }
+    .nutrition-intro { display: block; font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
+    .nutrition-grid { display: grid; gap: 0.6rem; }
+    .nutrition-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+    }
+    .nutrition-card h4 { font-size: 0.9rem; margin: 0 0 0.4rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .nutrition-card .kbu { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent); margin-bottom: 0.35rem; }
+    .nutrition-card .supplements { font-size: 0.8rem; color: var(--yellow); margin-bottom: 0.2rem; }
+    .nutrition-card .note { font-size: 0.8rem; color: var(--muted); }
+    .nutrition-card.bjj { border-color: rgba(29,155,240,0.4); background: rgba(29,155,240,0.06); }
+    .day-card .nutrition {
+      margin: 0.5rem 0 0.5rem 0;
+      padding: 0.5rem 0.6rem;
+      background: var(--surface2);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .day-card .nutrition.bjj { border-color: rgba(29,155,240,0.35); background: rgba(29,155,240,0.06); }
+    .day-card .nutrition .kbu { font-family: 'JetBrains Mono', monospace; color: var(--accent); margin-bottom: 0.2rem; }
+    .day-card .nutrition .supplements { color: var(--yellow); font-size: 0.8rem; margin-bottom: 0.2rem; }
+    .day-card .nutrition .note { color: var(--muted); font-size: 0.8rem; }
+    .footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    @media (min-width: 600px) {
+      body { padding: 2rem; }
+      .day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+      .day-grid .day-card { margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏝 Бали — план поездки</h1>
+    <p class="subtitle">8–21 февраля • 2 недели • Mahamustika Riverside, Pererenan</p>
+
+    <section class="work-schedule">
+      <h2>⏰ Удалёнка: окна для связи (Волгоград ↔ Бали)</h2>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem;">Волгоград UTC+3, Бали UTC+8 — разница <strong style="color: var(--text);">+5 часов</strong> (на Бали позже). В рабочие дни нужно быть онлайн в эти часы по местному времени Бали:</p>
+      <div style="display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.25rem;">Утро в Волгограде</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--accent);">15:00–16:00</div>
+          <div style="font-size: 0.85rem; color: var(--muted);">на Бали (10:00–11:00 в Волгограде)</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.25rem;">Вечер в Волгограде</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--orange);">23:00–00:00</div>
+          <div style="font-size: 0.85rem; color: var(--muted);">на Бали (18:00–19:00 в Волгограде)</div>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem;">Рекомендация по дню: серф/BJJ утром, завтрак до 15:00, <strong>15:00–16:00 — онлайн</strong>, обед/кафе/пляж, ужин с закатом, отдых, <strong>23:00–00:00 — онлайн</strong>, затем сон. Во второй слот нужен стабильный интернет в номере.</p>
+    </section>
+
+    <section>
+      <h2>План по дням (активности + КБЖУ и добавки)</h2>
+      <p style="font-size: 0.85rem; color: var(--muted); margin: -0.5rem 0 0.5rem 0;">Завтрак/обед — рядом или до ~30 мин на скутере (есть варианты подальше). Ужин с видом на закат — отмечен отдельно. Ссылки ведут на Google Maps. Питание: 75→70 кг, дефицит ~400–500 ккал/день, в дни BJJ — 3+ л воды и электролиты.</p>
+
+      <div class="day-card">
+        <h3>Сб 8 фев — Прилёт и заселение <span class="tag travel">День 1</span></h3>
+        <p class="date">Прилёт на Бали</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность, возможен дождь во второй половине дня. Ночью 24°C.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Front+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Front Café</a> или <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span> рядом. Ужин — лёгкий, по местному времени (адаптация).</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1900 ккал · Б 120 · Ж 55 · У 200</div><div class="supplements">Добавки: электролиты, магний вечером, мультивитамин.</div><div class="note">Лёгкий ужин по местному времени. Больше воды после перелёта.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Трансфер в Mahamustika Riverside (Pererenan)</span></label></li>
+          <li><label><input type="checkbox"><span>Обменять валюту (банкомат или обменник в Pererenan/Canggu)</span></label></li>
+          <li><label><input type="checkbox"><span>Купить сим-карту (Telkomsel/XL — в аэропорту или в городе)</span></label></li>
+          <li><label><input type="checkbox"><span>Купить предметы личной гигиены (аптека, мини-маркет)</span></label></li>
+          <li><label><input type="checkbox"><span>Заселиться, разобрать вещи</span></label></li>
+          <li><label><input type="checkbox"><span>Пройтись по району, найти магазины/кафе</span></label></li>
+          <li><label><input type="checkbox"><span>Лёгкий ужин по местному времени, ранний сон (адаптация)</span></label></li>
+        </ul>
+        <div class="room-products">
+          <h4>🛒 Продукты и закуски в номер (купить в первый день)</h4>
+          <ul style="padding-left: 1.2rem; margin: 0; color: var(--muted);">
+            <li><label><input type="checkbox"><span>Вода питьевая (бутыли 1,5–5 л) — запас на 2–3 дня</span></label></li>
+            <li><label><input type="checkbox"><span>Электролиты (порошок/таблетки: Na, K, Mg) — для дней BJJ и жары</span></label></li>
+            <li><label><input type="checkbox"><span>Фрукты: бананы, яблоки, манго — перекус и калий</span></label></li>
+            <li><label><input type="checkbox"><span>Орехи (миндаль, кешью) — белок, жиры, перекус</span></label></li>
+            <li><label><input type="checkbox"><span>Творог или греческий йогурт (если есть в холодильнике)</span></label></li>
+            <li><label><input type="checkbox"><span>Яйца (для завтрака в номере при раннем выезде)</span></label></li>
+            <li><label><input type="checkbox"><span>Хлебцы/крекеры цельнозерновые — лёгкий перекус</span></label></li>
+            <li><label><input type="checkbox"><span>Протеиновые батончики или готовый протеин (по желанию)</span></label></li>
+            <li><label><input type="checkbox"><span>Чай/кофе в пакетиках — без лишних калорий</span></label></li>
+            <li><label><input type="checkbox"><span>Соль (щепотка в воду после BJJ — восполнение натрия)</span></label></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <h3>Вс 9 фев — Адаптация + первый серф <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <p class="date">День 2</p>
+        <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром ясно — хороший день для серфа. К вечеру возможны облака. Влажность высокая.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> • <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span>.</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> (Echo Beach, 10 мин) — пляж, дерево, вид на океан. Прийти к 16:00–16:30 на столик.</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~2000 ккал · Б 130 · Ж 60 · У 210</div><div class="supplements">Добавки: электролиты после серфа, омега-3, витамин D.</div><div class="note">Завтрак до серфа, обед плотнее. Вода 2,5–3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Утренний серф на Pererenan Beach (спокойный вход в режим)</span></label></li>
+          <li><label><input type="checkbox"><span>Йога или растяжка (отель / студия в Pererenan)</span></label></li>
+          <li><label><input type="checkbox"><span>Массаж: <a href="https://www.google.com/maps/search/Sora+Pererenan+Spa+Bali" target="_blank" rel="noopener">Sora Pererenan Spa</a> или <a href="https://www.google.com/maps/search/Kharista+Spa+Canggu+Bali" target="_blank" rel="noopener">Kharista Spa</a></span></label></li>
+          <li><label><input type="checkbox"><span>Отдых у бассейна, гидратация</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Пн 10 фев — BJJ #1 <span class="tag bjj">BJJ</span></h3>
+        <p class="date">Woven BJJ</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">31°C</span><span class="weather-desc">Переменная облачность. Возможны грозы во второй половине дня — удобнее утренняя тренировка.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span> рядом. <span class="far">Обед подальше (~25 мин):</span> <a href="https://www.google.com/maps/search/Ji+Restaurant+Bali+Canggu" target="_blank" rel="noopener">Ji Restaurant</a> (японская кухня, храм с видом на океан, 4.8).</p>
+        <div class="nutrition bjj"><div class="kbu">КБЖУ: ~2100 ккал · Б 140 · Ж 60 · У 220</div><div class="supplements">Добавки: электролиты до и после тренировки, магний, соль на еду.</div><div class="note">Гидратация: 0,5 л за 1–2 ч до BJJ, после — 0,5–1 л с электролитами. Углеводы за 1–2 ч до и после.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Утренняя или вечерняя тренировка в Woven</span></label></li>
+          <li><label><input type="checkbox"><span>Проверить расписание, запись при необходимости</span></label></li>
+          <li><label><input type="checkbox"><span>После тренировки: лёгкая еда, отдых</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Вт 11 фев — Серф + восстановление <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <p class="date">День 4</p>
+        <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность. Утро подходит для серфа, днём возможны кратковременные ливни.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a> • <a href="https://www.google.com/maps/search/Revolver+Canggu+Bali" target="_blank" rel="noopener">Revolver</a> <span class="rating">4.6</span>.</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar Bali</a> (инфинити-пул, вид на океан) или <a href="https://www.google.com/maps/search/FINNS+Beach+Club+Canggu" target="_blank" rel="noopener">FINNS Beach Club</a> (пляж, пулы). Canggu, 10–15 мин.</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1950 ккал · Б 125 · Ж 58 · У 205</div><div class="supplements">Добавки: электролиты после серфа, омега-3.</div><div class="note">Вода 2,5–3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Серф утром (Pererenan или Echo Beach)</span></label></li>
+          <li><label><input type="checkbox"><span>Массаж: <a href="https://www.google.com/maps/search/Kharista+Spa+Canggu+Bali" target="_blank" rel="noopener">Kharista Spa</a> или <a href="https://www.google.com/maps/search/Jani+Spa+Pererenan+Canggu" target="_blank" rel="noopener">Jani Spa</a> (Pererenan)</span></label></li>
+          <li><label><input type="checkbox"><span>Свободный день: кафе, пляж, чтение</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Ср 12 фев — BJJ #2 <span class="tag bjj">BJJ</span></h3>
+        <p class="date">Bali MMA</p>
+        <p class="weather"><span class="weather-icon">🌧</span><span class="weather-temp">29°C</span><span class="weather-desc">Дожди вероятны. Февраль — сезон дождей: бери дождевик, зал в помещении — плюс.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Human+Bean+Canggu+Bali" target="_blank" rel="noopener">Human Bean</a> или <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span>. <span class="far">Обед подальше (~20 мин, Seminyak):</span> <a href="https://www.google.com/maps/search/Sa+mesa+Canggu+Seminyak+Bali" target="_blank" rel="noopener">Sa'mesa</a> (итальянская кухня, 4.9, бронь).</p>
+        <div class="nutrition bjj"><div class="kbu">КБЖУ: ~2100 ккал · Б 140 · Ж 60 · У 220</div><div class="supplements">Добавки: электролиты до/после BJJ, магний, соль. При сильной потере — Oralit после.</div><div class="note">Пить до тренировки, по глотку во время, восполнить после с Na/K/Mg. Вода 3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Тренировка в Bali MMA (Canggu)</span></label></li>
+          <li><label><input type="checkbox"><span>День без серфа — дать телу восстановиться после двух нагрузок</span></label></li>
+          <li><label><input type="checkbox"><span>Бассейн, растяжка</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Чт 13 фев — Серф + йога <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <p class="date">День 6</p>
+        <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром солнечно — удачный день для серфа и йоги. К вечеру возможна облачность.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span> • <a href="https://www.google.com/maps/search/Front+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Front Café</a>.</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> или <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a> (10–15 мин, удобно вернуться к 23:00). <span class="far">Uluwatu/Jimbaran обычно 1–1,5 ч в одну сторону — лучше планировать в выходной.</span></p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1950 ккал · Б 125 · Ж 58 · У 205</div><div class="supplements">Добавки: электролиты, омега-3.</div><div class="note">Умеренный дефицит, фокус на белок и овощи.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Утренний серф</span></label></li>
+          <li><label><input type="checkbox"><span>Йога (утром или вечером)</span></label></li>
+          <li><label><input type="checkbox"><span>Лёгкий день без BJJ</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Пт 14 фев — День отдыха (в районе Pererenan/Canggu) <span class="tag rest">Отдых</span></h3>
+        <p class="date">День 7 — середина поездки. Будний день: окна связи 15:00–16:00 и 23:00–00:00.</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Частичная облачность, возможны кратковременные ливни. Хороший день для восстановления.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Woods+Bali+Pererenan" target="_blank" rel="noopener">Woods</a> • <a href="https://www.google.com/maps/search/Cactus+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Cactus Cafe</a>. <span class="far">Обед подальше (в пределах 30 мин):</span> <a href="https://www.google.com/maps/search/Ji+Restaurant+Bali+Canggu" target="_blank" rel="noopener">Ji Restaurant</a>.</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> / <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a> / <a href="https://www.google.com/maps/search/FINNS+Beach+Club+Canggu" target="_blank" rel="noopener">FINNS</a> (10–20 мин) — чтобы спокойно вернуться к 23:00.</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1850 ккал · Б 120 · Ж 55 · У 195</div><div class="supplements">Добавки: мультивитамин, магний, омега-3.</div><div class="note">День отдыха — ниже калорий, но белок сохраняем.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Без интенсивных тренировок</span></label></li>
+          <li><label><input type="checkbox"><span>Массаж: <a href="https://www.google.com/maps/search/Sora+Pererenan+Spa+Bali" target="_blank" rel="noopener">Sora</a> / <a href="https://www.google.com/maps/search/Kharista+Spa+Canggu+Bali" target="_blank" rel="noopener">Kharista</a> / <a href="https://www.google.com/maps/search/Jani+Spa+Pererenan+Canggu" target="_blank" rel="noopener">Jani</a></span></label></li>
+          <li><label><input type="checkbox"><span>15:00–16:00 — быть онлайн</span></label></li>
+          <li><label><input type="checkbox"><span>23:00–00:00 — быть онлайн (лучше из номера)</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Сб 15 фев — Поездка в Ubud (выходной, без рабочих окон) <span class="tag rest">Отдых</span></h3>
+        <p class="date">День 8 — выезд утром, возвращение днём/вечером. Дорога ~1–1,5 ч в одну сторону (лучше выехать рано).</p>
+        <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">30°C</span><span class="weather-desc">Тёпло и влажно. В Ubud обычно чуть прохладнее из-за зелени.</span></p>
+        <p class="cafe"><strong>☕ В Ubud:</strong> <a href="https://www.google.com/maps/search/Tegalalang+Rice+Terraces+Ubud+Bali" target="_blank" rel="noopener">Tegalalang Rice Terraces</a> (утром меньше людей) • <a href="https://www.google.com/maps/search/Campuhan+Ridge+Walk+Ubud" target="_blank" rel="noopener">Campuhan Ridge Walk</a> • по желанию Monkey Forest. Обед в Ubud.</p>
+        <p class="cafe cafe-dinner"><strong>💆 Массаж в Ubud:</strong> <a href="https://www.google.com/maps/search/Yeh+Pulu+Massage+Ubud+Bali" target="_blank" rel="noopener">Yeh Pulu Massage</a> (4.9) или <a href="https://www.google.com/maps/search/Synergy+Spa+Ubud+Bali" target="_blank" rel="noopener">Synergy Spa</a> (4.9). <strong>🌅 Закат</strong> лучше ловить уже у океана: <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> / <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a> (на обратном пути).</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1850–1900 ккал · Б 120 · Ж 55 · У 195–200</div><div class="supplements">Добавки: магний вечером, электролиты по дороге (жара), омега-3.</div><div class="note">День с дорогой: вода и электролиты, лёгкие перекусы.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Выезд в Ubud (лучше 7:00–8:00)</span></label></li>
+          <li><label><input type="checkbox"><span>Tegalalang — прогулка/фото</span></label></li>
+          <li><label><input type="checkbox"><span>Campuhan Ridge Walk или Monkey Forest</span></label></li>
+          <li><label><input type="checkbox"><span>Массаж: Yeh Pulu или Synergy (бронь)</span></label></li>
+          <li><label><input type="checkbox"><span>Возврат в Pererenan, закат у океана при желании</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Вс 16 фев — BJJ #3 <span class="tag bjj">BJJ</span></h3>
+        <p class="date">pound4pound dojo</p>
+        <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">31°C</span><span class="weather-desc">Переменная облачность. Температура моря ~29°C — после тренировки можно на пляж.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> • <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span>.</p>
+        <div class="nutrition bjj"><div class="kbu">КБЖУ: ~2100 ккал · Б 140 · Ж 60 · У 220</div><div class="supplements">Добавки: электролиты до/после, магний, соль.</div><div class="note">Углеводы вокруг тренировки. Вода 3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Тренировка в pound4pound dojo</span></label></li>
+          <li><label><input type="checkbox"><span>После — пляж или бассейн</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Пн 17 фев — Серф + восстановление <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <p class="date">День 10. Будний день: окна связи 15:00–16:00 и 23:00–00:00.</p>
+        <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром ясно, ветер слабый — комфортно для серфа. Днём возможны облака.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Revolver+Canggu+Bali" target="_blank" rel="noopener">Revolver</a> <span class="rating">4.6</span> • <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a>.</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> рядом — <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> / <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a>, чтобы успеть к 23:00.</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~2000 ккал · Б 130 · Ж 60 · У 210</div><div class="supplements">Добавки: электролиты, омега-3.</div><div class="note">Вода 2,5–3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Серф утром</span></label></li>
+          <li><label><input type="checkbox"><span>Йога или массаж: <a href="https://www.google.com/maps/search/Sora+Pererenan+Spa+Bali" target="_blank" rel="noopener">Sora</a> / <a href="https://www.google.com/maps/search/Kharista+Spa+Canggu+Bali" target="_blank" rel="noopener">Kharista</a></span></label></li>
+          <li><label><input type="checkbox"><span>15:00–16:00 — быть онлайн</span></label></li>
+          <li><label><input type="checkbox"><span>23:00–00:00 — быть онлайн</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Вт 18 фев — BJJ #4 <span class="tag bjj">BJJ</span></h3>
+        <p class="date">theblock</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">29°C</span><span class="weather-desc">Возможны грозы во второй половине дня. Утренняя тренировка предпочтительнее.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Human+Bean+Canggu+Bali" target="_blank" rel="noopener">Human Bean</a> или <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span> (рядом с залом).</p>
+        <div class="nutrition bjj"><div class="kbu">КБЖУ: ~2100 ккал · Б 140 · Ж 60 · У 220</div><div class="supplements">Добавки: электролиты до/после, магний, соль.</div><div class="note">После BJJ — полноценный приём с белком и углеводами, электролиты обязательны.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Тренировка в theblock (лучше утром)</span></label></li>
+          <li><label><input type="checkbox"><span>После — восстановление, электролиты</span></label></li>
+          <li><label><input type="checkbox"><span>15:00–16:00 — быть онлайн</span></label></li>
+          <li><label><input type="checkbox"><span>23:00–00:00 — быть онлайн</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Ср 19 фев — Йога и лёгкий день <span class="tag recovery">Восстановление</span></h3>
+        <p class="date">День 12</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Возможны кратковременные дожди. Йога под крышей — в самый раз.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a> (здоровый обед после йоги).</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом:</strong> рядом — <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a> или <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> (чтобы не разъезжаться далеко в будний день).</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1900 ккал · Б 120 · Ж 55 · У 200</div><div class="supplements">Добавки: мультивитамин, магний, омега-3.</div><div class="note">—</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Йога утром</span></label></li>
+          <li><label><input type="checkbox"><span>По желанию: лёгкий серф или только бассейн/пляж</span></label></li>
+          <li><label><input type="checkbox"><span>Кафе, прогулки</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Чт 20 фев — Последний серф <span class="tag surf">Серфинг</span></h3>
+        <p class="date">День 13</p>
+        <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">31°C</span><span class="weather-desc">Утром ясно — хороший день для последнего серфа. К вечеру возможна облачность.</span></p>
+        <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> (перед серфом).</p>
+        <p class="cafe cafe-dinner"><strong>🌅 Ужин с закатом (последний вечер):</strong> рядом — <a href="https://www.google.com/maps/search/La+Brisa+Bali+Echo+Beach" target="_blank" rel="noopener">La Brisa</a> / <a href="https://www.google.com/maps/search/Cafe+del+Mar+Bali+Canggu" target="_blank" rel="noopener">Café del Mar</a> / <a href="https://www.google.com/maps/search/FINNS+Beach+Club+Canggu" target="_blank" rel="noopener">FINNS</a>. <span class="far">Дальние варианты (Uluwatu/Jimbaran) обычно 1–1,5 ч в одну сторону и могут конфликтовать с 23:00–00:00.</span></p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~2000 ккал · Б 130 · Ж 60 · У 210</div><div class="supplements">Добавки: электролиты после серфа.</div><div class="note">Завтрак перед серфом, обед после. Вода 2,5–3 л.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Утренний серф на любимом споте</span></label></li>
+          <li><label><input type="checkbox"><span>Сбор вещей, проверка вылета</span></label></li>
+        </ul>
+      </div>
+
+      <div class="day-card">
+        <h3>Пт 21 фев — Выезд <span class="tag travel">День 14</span></h3>
+        <p class="date">Вылет с Бали</p>
+        <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность. Возможен дождь — заложи время на дорогу в аэропорт.</span></p>
+        <p class="cafe"><strong>☕</strong> Завтрак/кофе по дороге или в аэропорту.</p>
+        <div class="nutrition"><div class="kbu">КБЖУ: ~1900 ккал · Б 120 · Ж 55 · У 200</div><div class="supplements">Добавки: по привычке (электролиты в дорогу при желании).</div><div class="note">Лёгкие приёмы, вода в пути.</div></div>
+        <ul>
+          <li><label><input type="checkbox"><span>Трансфер в аэропорт</span></label></li>
+          <li><label><input type="checkbox"><span>Вылет</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Акклиматизация (первые дни)</h2>
+      <div class="recovery-list">
+        <div class="recovery-item">
+          <h4>До перелёта</h4>
+          <p>За 1–2 дня сдвигай сон к времени Бали; меньше кофеина, больше воды; выспись перед вылетом.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>В самолёте</h4>
+          <p>Пей воду, избегай алкоголя и тяжёлой еды. Двигайся в проходе, маска для сна и беруши помогут отдохнуть по местному времени.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>После прилёта</h4>
+          <p>Будь на свету днём — помогает сбросить циркадный ритм. Ешь по местному времени. Днём не спи больше 20–30 минут. Пей много воды (влажность высокая). Лёгкая активность: прогулка, плавание — помогают адаптации.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>Первый вечер</h4>
+          <p>Лёгкий ужин, ранний сон. Если не спится — мелатонин по инструкции (после консультации с врачом). Минимум 4 часа сна по местному времени уже помогают.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Вещи в поездку</h2>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem;">На Бали влажность 70–90% круглый год — конденсат, соль у океана, риск коррозии контактов и порчи документов. <strong style="color: var(--text);">Документы и технику храни в зип-пакетах</strong> (плотные с замком): паспорт, права, сим-карты, флешки, зарядки в сумке. Телефон/ноут в рюкзаке на скутере — тоже в пакете от дождя и влаги. Рекомендация распространена у путешественников и в гайдах по Бали (влаго- и пылезащита без дорогих кейсов).</p>
+
+      <div style="display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 1rem;">
+        <div>
+          <h3 style="font-size: 0.95rem; color: var(--green); margin-bottom: 0.5rem;">✓ Взять с собой</h3>
+          <ul class="packing-list" style="margin: 0; list-style: none; padding: 0;">
+            <li><label><input type="checkbox"><span><strong>Документы (в зип-пакете):</strong> паспорт, права (для скутера), страховка, распечатка броней, карта/наличные</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Техника (в зип-пакетах):</strong> ноутбук + зарядка, телефон + кабель, powerbank, наушники для созвонов</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Зип-пакеты:</strong> несколько плотных (A4 и маленькие) для документов, техники, влажных вещей после серфа</span></label></li>
+            <li><label><input type="checkbox"><span><strong>BJJ:</strong> рашгард при желании, шлёпанцы в зал (ги не берёшь)</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Серфинг/пляж:</strong> плавки/шорты для серфа, рипстоп или лайкра по желанию; полотенце быстросохнущее</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Одежда:</strong> лёгкая светлая, футболки, шорты, 1 длинные штаны/леггинсы для йоги, дождевик или ветровка</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Обувь:</strong> сланцы, кроссовки только если нужны для зала/прогулок</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Аптечка и добавки:</strong> по списку выше (регидратация, обезболивающее, антигистаминное, электролиты, магний, омега-3 и т.д.)</span></label></li>
+            <li><label><input type="checkbox"><span><strong>SPF и репеллент:</strong> лучше взять привычный SPF 50+ и репеллент — на месте выбор есть, но марки другие</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Мелочи:</strong> бутылка для воды складная, маска для сна, беруши, адаптер розетки (в Индонезии Europlug C/F, 230 V)</span></label></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size: 0.95rem; color: var(--orange); margin-bottom: 0.5rem;">🛒 Купить на месте (первый день)</h3>
+          <ul class="packing-list packing-list-buy" style="margin: 0; list-style: none; padding: 0;">
+            <li><label><input type="checkbox"><span><strong>Связь:</strong> сим-карта Telkomsel/XL (аэропорт или мини-маркет)</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Гигиена:</strong> зубная щётка/паста, мыло, шампунь, дезодорант, солнцезащитный крем при необходимости докупить</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Вода и перекусы:</strong> бутыли 1,5–5 л, фрукты, орехи, электролиты в порошке (см. список «Продукты в номер»)</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Серфинг:</strong> доску и при желании гидрокостюм/лейку арендовать на пляже (Pererenan, Echo Beach)</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Дождь:</strong> зонт или дождевик дешёво в кружалах/магазинах, если не взял</span></label></li>
+            <li><label><input type="checkbox"><span><strong>Сумка для скутера:</strong> гермо/водостойкая сумка для телефона и документов при поездках под дождём — в Canggu много вариантов</span></label></li>
+          </ul>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem;">Аренда скутера — по прилёте в Pererenan/Canggu (нужны права). Аптеки (Guardian, Kimia Farma, Circle K) — Oralit, парацетамол, репеллент, гигиена.</p>
+        </div>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--muted); margin-top: 1rem;">Галочки вещей сохраняются в браузере. Одежду и рашгард после BJJ лучше сушить на веранде/на солнце — в номере из-за влажности сохнет долго.</p>
+    </section>
+
+    <section>
+      <h2>Аптечка</h2>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem;">Собери перед поездкой. Рецептурные препараты — в оригинальной упаковке, в ручной клади; при необходимости декларируй на таможне.</p>
+      <ul class="pharmacy-list">
+        <li><label><input type="checkbox"><span><strong>Желудок и кишечник:</strong> соли для регидратации (Oralit), лоперамид (взрослым, не более 8 мг/день), пробиотики</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Боль и жар:</strong> парацетамол (при лихорадке предпочтительнее ибупрофена из‑за денге), ибупрофен (при воспалении, не при лихорадке)</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Аллергия и укусы:</strong> цетиризин или лоратадин, гидрокортизон 1% крем от зуда</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Тошнота и укачивание:</strong> дименгидринат (Antimo и др.)</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Изжога:</strong> антацид (Mylanta, Promag) или омепразол</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Ранки и порезы:</strong> антисептик (бетадин/повидон-йод), пластыри водостойкие, бинт стерильный, лейкопластырь</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Солнце и насекомые:</strong> крем SPF 50+, репеллент от комаров</span></label></li>
+        <li><label><input type="checkbox"><span><strong>Прочее:</strong> цифровой термометр, личные рецептурные препараты (в оригинале)</span></label></li>
+      </ul>
+      <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem;">В Индонезии в аптеках: Oralit, Parasetamol, Loperamide, Promag, Cetirizine, Antimo, Betadine. При высокой температуре &gt;38,5°C более 48 ч, крови в стуле, сильном обезвоживании или непрекращающейся рвоте — срочно к врачу.</p>
+    </section>
+
+    <section>
+      <h2>Залы BJJ (4 зала)</h2>
+      <div class="gym-list">
+        <div class="gym-item">
+          <h4>1. Woven</h4>
+          <p>BJJ в районе Canggu. Уточни расписание в соцсетях или на сайте.</p>
+          <a href="https://www.instagram.com/wovenbjj" target="_blank" rel="noopener">Instagram →</a>
+        </div>
+        <div class="gym-item">
+          <h4>2. Bali MMA</h4>
+          <p>BJJ и MMA, Canggu. Обычно есть утренние и вечерние классы.</p>
+          <a href="https://balimma.com" target="_blank" rel="noopener">balimma.com →</a>
+        </div>
+        <div class="gym-item">
+          <h4>3. pound4pound dojo</h4>
+          <p>BJJ зал в Canggu. Проверь расписание перед визитом.</p>
+          <a href="https://www.instagram.com/pound4poundbali" target="_blank" rel="noopener">Instagram →</a>
+        </div>
+        <div class="gym-item">
+          <h4>4. theblock</h4>
+          <p>BJJ / grappling в районе Canggu. Расписание — в соцсетях.</p>
+          <a href="https://www.instagram.com/theblockbali" target="_blank" rel="noopener">Instagram →</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Массаж и спа (с высоким рейтингом)</h2>
+      <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">Подборка по отзывам и рейтингам. Ссылки ведут на Google Maps. Бронь желательна в выходные и на популярные слоты.</p>
+      <div class="gym-list">
+        <div class="gym-item">
+          <h4>Pererenan / Canggu</h4>
+          <p><a href="https://www.google.com/maps/search/Sora+Pererenan+Spa+Bali" target="_blank" rel="noopener">Sora Pererenan Spa</a> — баллийский массаж, лица, пакеты 500k–1M IDR. Опыт 12+ лет.</p>
+          <p><a href="https://www.google.com/maps/search/Kharista+Spa+Canggu+Bali" target="_blank" rel="noopener">Kharista Spa & Wellness</a> — Canggu, традиция + современный спа, скидка при брони, трансфер в Pererenan/Canggu.</p>
+          <p><a href="https://www.google.com/maps/search/Jani+Spa+Pererenan+Canggu" target="_blank" rel="noopener">Jani Spa</a> — у Shore Amora, Pererenan, массаж, скрабы, лица. 9–17.</p>
+          <p><a href="https://www.google.com/maps/search/Harmony+Spa+Bali+Canggu" target="_blank" rel="noopener">Harmony Spa Bali</a> — от 150k IDR/час в спа, выезд в Pererenan от 300k.</p>
+        </div>
+        <div class="gym-item">
+          <h4>Ubud (в день поездки в Ubud)</h4>
+          <p><a href="https://www.google.com/maps/search/Yeh+Pulu+Massage+Ubud+Bali" target="_blank" rel="noopener">Yeh Pulu Massage</a> — 4.9, центр Ubud, англ. 10–21.</p>
+          <p><a href="https://www.google.com/maps/search/Synergy+Spa+Ubud+Bali" target="_blank" rel="noopener">Synergy Spa</a> — 4.9, баллийский, бамбук, камни, рефлексология. 11–22.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Восстановление и отдых</h2>
+      <div class="recovery-list">
+        <div class="recovery-item">
+          <h4>Йога</h4>
+          <p>Студии в Pererenan/Canggu (The Shala, Samadi, местные студии). Утренняя практика хорошо сочетается с серфом.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>Массаж</h4>
+          <p>Конкретные места с высоким рейтингом — в секции «Массаж и спа» выше и в плане по дням (Sora, Kharista, Jani в Pererenan/Canggu; Yeh Pulu, Synergy в Ubud). После BJJ или серфа — удобно Sora или Kharista.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>Сауна / холодная ванна</h4>
+          <p>Часть залов и спа предлагают сауну; холодная ванна или океан — хорошее восстановление после нагрузок.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>Плавание в бассейне</h4>
+          <p>Лёгкое плавание без интенсивности — активное восстановление между BJJ и серфом.</p>
+        </div>
+        <div class="recovery-item">
+          <h4>Растяжка и мобильность</h4>
+          <p>10–15 минут утром или вечером в номере или у бассейна.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Серфинг — споты рядом с Pererenan</h2>
+      <ul style="color: var(--muted); font-size: 0.9rem; padding-left: 1.25rem;">
+        <li><strong style="color: var(--text);">Pererenan Beach</strong> — рядом с отелем, подходит для разного уровня.</li>
+        <li><strong style="color: var(--text);">Echo Beach</strong> — чуть севернее, более мощные волны.</li>
+        <li><strong style="color: var(--text);">Berawa</strong> — в сторону Canggu, популярный спот.</li>
+      </ul>
+      <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">Утром волны обычно чище и меньше ветра. Аренда доски и уроки доступны на пляжах.</p>
+    </section>
+
+    <div class="footer">
+      <p>Чек-лист сохраняется в браузере (галочки). Распечатай или открой на телефоне перед поездкой.</p>
+      <p style="margin-top: 0.5rem;">Прогноз погоды — типичные условия для февраля в районе Canggu/Pererenan (сезон дождей: 29–31°C днём, 22–24°C ночью, возможны ливни и грозы во второй половине дня). Перед поездкой проверь актуальный прогноз: <a href="https://www.weather.com/weather/tenday/l/Canggu+Bali+Indonesia" target="_blank" rel="noopener" style="color: var(--accent);">weather.com</a>, <a href="https://www.accuweather.com/en/id/canggu/3467615/weather-forecast/3467615" target="_blank" rel="noopener" style="color: var(--accent);">AccuWeather</a>.</p>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var key = 'bali-checklist';
+      var keyPharmacy = 'bali-pharmacy';
+      var keyPacking = 'bali-packing';
+      var inputs = document.querySelectorAll('.day-card input[type="checkbox"]');
+      var pharmacyInputs = document.querySelectorAll('.pharmacy-list input[type="checkbox"]');
+      var packingInputs = document.querySelectorAll('.packing-list input[type="checkbox"]');
+      function save() {
+        var state = [];
+        inputs.forEach(function(inp, i) { state.push(inp.checked); });
+        try { localStorage.setItem(key, JSON.stringify(state)); } catch (e) {}
+      }
+      function savePharmacy() {
+        var state = [];
+        pharmacyInputs.forEach(function(inp, i) { state.push(inp.checked); });
+        try { localStorage.setItem(keyPharmacy, JSON.stringify(state)); } catch (e) {}
+      }
+      function savePacking() {
+        var state = [];
+        packingInputs.forEach(function(inp, i) { state.push(inp.checked); });
+        try { localStorage.setItem(keyPacking, JSON.stringify(state)); } catch (e) {}
+      }
+      function load() {
+        try {
+          var state = JSON.parse(localStorage.getItem(key));
+          if (Array.isArray(state)) state.forEach(function(v, i) {
+            if (inputs[i]) inputs[i].checked = !!v;
+          });
+        } catch (e) {}
+        try {
+          var stateP = JSON.parse(localStorage.getItem(keyPharmacy));
+          if (Array.isArray(stateP)) stateP.forEach(function(v, i) {
+            if (pharmacyInputs[i]) pharmacyInputs[i].checked = !!v;
+          });
+        } catch (e) {}
+        try {
+          var statePack = JSON.parse(localStorage.getItem(keyPacking));
+          if (Array.isArray(statePack)) statePack.forEach(function(v, i) {
+            if (packingInputs[i]) packingInputs[i].checked = !!v;
+          });
+        } catch (e) {}
+      }
+      inputs.forEach(function(inp) { inp.addEventListener('change', save); });
+      pharmacyInputs.forEach(function(inp) { inp.addEventListener('change', savePharmacy); });
+      packingInputs.forEach(function(inp) { inp.addEventListener('change', savePacking); });
+      load();
+    })();
+  </script>
+  <script>
+    (function() {
+      if (!('serviceWorker' in navigator)) return;
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./service-worker.js').catch(function() {
+          // Ignore registration errors (e.g. file:// or no HTTPS)
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
