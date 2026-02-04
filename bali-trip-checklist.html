@@ -71,9 +71,14 @@
       font-size: 1rem;
       font-weight: 600;
       margin: 0 0 0.5rem 0;
+      display: block;
+    }
+    .day-card .day-title { display: block; }
+    .day-card .day-tags {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
     }
     .day-card .date {
       font-family: 'JetBrains Mono', monospace;
@@ -151,7 +156,7 @@
       letter-spacing: 0.04em;
       padding: 0.2rem 0.5rem;
       border-radius: 6px;
-      margin-left: 0.35rem;
+      margin-left: 0;
     }
     .tag.bjj { background: #1d9bf022; color: var(--accent); }
     .tag.surf { background: #00ba7c22; color: var(--green); }
@@ -228,6 +233,33 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(15, 20, 25, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.6rem 0.75rem;
+      margin: 0 0 1rem 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+    .top-nav a {
+      display: inline-block;
+      margin-right: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .top-nav a:last-child { margin-right: 0; }
+    .top-nav a:hover { border-color: rgba(29,155,240,0.6); }
     @media (min-width: 600px) {
       body { padding: 2rem; }
       .day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
@@ -240,7 +272,18 @@
     <h1>🏝 Бали — план поездки</h1>
     <p class="subtitle">8–21 февраля • 2 недели • Mahamustika Riverside, Pererenan</p>
 
-    <section class="work-schedule">
+    <nav class="top-nav" aria-label="Навигация">
+      <a href="#plan">План</a>
+      <a href="#work">Удалёнка</a>
+      <a href="#packing">Вещи</a>
+      <a href="#pharmacy">Аптечка</a>
+      <a href="#bjj">BJJ</a>
+      <a href="#massage">Массаж</a>
+      <a href="#recovery">Восстановление</a>
+      <a href="#surf">Серф</a>
+    </nav>
+
+    <section class="work-schedule" id="work">
       <h2>⏰ Удалёнка: окна для связи (Волгоград ↔ Бали)</h2>
       <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem;">Волгоград UTC+3, Бали UTC+8 — разница <strong style="color: var(--text);">+5 часов</strong> (на Бали позже). В рабочие дни нужно быть онлайн в эти часы по местному времени Бали:</p>
       <div style="display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
@@ -258,12 +301,12 @@
       <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem;">Рекомендация по дню: серф/BJJ утром, завтрак до 15:00, <strong>15:00–16:00 — онлайн</strong>, обед/кафе/пляж, ужин с закатом, отдых, <strong>23:00–00:00 — онлайн</strong>, затем сон. Во второй слот нужен стабильный интернет в номере.</p>
     </section>
 
-    <section>
+    <section id="plan">
       <h2>План по дням (активности + КБЖУ и добавки)</h2>
       <p style="font-size: 0.85rem; color: var(--muted); margin: -0.5rem 0 0.5rem 0;">Завтрак/обед — рядом или до ~30 мин на скутере (есть варианты подальше). Ужин с видом на закат — отмечен отдельно. Ссылки ведут на Google Maps. Питание: 75→70 кг, дефицит ~400–500 ккал/день, в дни BJJ — 3+ л воды и электролиты.</p>
 
       <div class="day-card">
-        <h3>Сб 8 фев — Прилёт и заселение <span class="tag travel">День 1</span></h3>
+        <h3><span class="day-title">Сб 8 фев — Прилёт и заселение</span><span class="day-tags"><span class="tag travel">День 1</span></span></h3>
         <p class="date">Прилёт на Бали</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность, возможен дождь во второй половине дня. Ночью 24°C.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Front+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Front Café</a> или <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span> рядом. Ужин — лёгкий, по местному времени (адаптация).</p>
@@ -295,7 +338,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Вс 9 фев — Адаптация + первый серф <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <h3><span class="day-title">Вс 9 фев — Адаптация + первый серф</span><span class="day-tags"><span class="tag surf">Серфинг</span><span class="tag recovery">Восстановление</span></span></h3>
         <p class="date">День 2</p>
         <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром ясно — хороший день для серфа. К вечеру возможны облака. Влажность высокая.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> • <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span>.</p>
@@ -310,7 +353,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Пн 10 фев — BJJ #1 <span class="tag bjj">BJJ</span></h3>
+        <h3><span class="day-title">Пн 10 фев — BJJ #1</span><span class="day-tags"><span class="tag bjj">BJJ</span></span></h3>
         <p class="date">Woven BJJ</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">31°C</span><span class="weather-desc">Переменная облачность. Возможны грозы во второй половине дня — удобнее утренняя тренировка.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span> рядом. <span class="far">Обед подальше (~25 мин):</span> <a href="https://www.google.com/maps/search/Ji+Restaurant+Bali+Canggu" target="_blank" rel="noopener">Ji Restaurant</a> (японская кухня, храм с видом на океан, 4.8).</p>
@@ -323,7 +366,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Вт 11 фев — Серф + восстановление <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <h3><span class="day-title">Вт 11 фев — Серф + восстановление</span><span class="day-tags"><span class="tag surf">Серфинг</span><span class="tag recovery">Восстановление</span></span></h3>
         <p class="date">День 4</p>
         <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность. Утро подходит для серфа, днём возможны кратковременные ливни.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a> • <a href="https://www.google.com/maps/search/Revolver+Canggu+Bali" target="_blank" rel="noopener">Revolver</a> <span class="rating">4.6</span>.</p>
@@ -337,7 +380,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Ср 12 фев — BJJ #2 <span class="tag bjj">BJJ</span></h3>
+        <h3><span class="day-title">Ср 12 фев — BJJ #2</span><span class="day-tags"><span class="tag bjj">BJJ</span></span></h3>
         <p class="date">Bali MMA</p>
         <p class="weather"><span class="weather-icon">🌧</span><span class="weather-temp">29°C</span><span class="weather-desc">Дожди вероятны. Февраль — сезон дождей: бери дождевик, зал в помещении — плюс.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Human+Bean+Canggu+Bali" target="_blank" rel="noopener">Human Bean</a> или <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span>. <span class="far">Обед подальше (~20 мин, Seminyak):</span> <a href="https://www.google.com/maps/search/Sa+mesa+Canggu+Seminyak+Bali" target="_blank" rel="noopener">Sa'mesa</a> (итальянская кухня, 4.9, бронь).</p>
@@ -350,7 +393,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Чт 13 фев — Серф + йога <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <h3><span class="day-title">Чт 13 фев — Серф + йога</span><span class="day-tags"><span class="tag surf">Серфинг</span><span class="tag recovery">Восстановление</span></span></h3>
         <p class="date">День 6</p>
         <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром солнечно — удачный день для серфа и йоги. К вечеру возможна облачность.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span> • <a href="https://www.google.com/maps/search/Front+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Front Café</a>.</p>
@@ -364,7 +407,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Пт 14 фев — День отдыха (в районе Pererenan/Canggu) <span class="tag rest">Отдых</span></h3>
+        <h3><span class="day-title">Пт 14 фев — День отдыха (в районе Pererenan/Canggu)</span><span class="day-tags"><span class="tag rest">Отдых</span></span></h3>
         <p class="date">День 7 — середина поездки. Будний день: окна связи 15:00–16:00 и 23:00–00:00.</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Частичная облачность, возможны кратковременные ливни. Хороший день для восстановления.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Woods+Bali+Pererenan" target="_blank" rel="noopener">Woods</a> • <a href="https://www.google.com/maps/search/Cactus+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Cactus Cafe</a>. <span class="far">Обед подальше (в пределах 30 мин):</span> <a href="https://www.google.com/maps/search/Ji+Restaurant+Bali+Canggu" target="_blank" rel="noopener">Ji Restaurant</a>.</p>
@@ -379,7 +422,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Сб 15 фев — Поездка в Ubud (выходной, без рабочих окон) <span class="tag rest">Отдых</span></h3>
+        <h3><span class="day-title">Сб 15 фев — Поездка в Ubud (выходной, без рабочих окон)</span><span class="day-tags"><span class="tag rest">Отдых</span></span></h3>
         <p class="date">День 8 — выезд утром, возвращение днём/вечером. Дорога ~1–1,5 ч в одну сторону (лучше выехать рано).</p>
         <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">30°C</span><span class="weather-desc">Тёпло и влажно. В Ubud обычно чуть прохладнее из-за зелени.</span></p>
         <p class="cafe"><strong>☕ В Ubud:</strong> <a href="https://www.google.com/maps/search/Tegalalang+Rice+Terraces+Ubud+Bali" target="_blank" rel="noopener">Tegalalang Rice Terraces</a> (утром меньше людей) • <a href="https://www.google.com/maps/search/Campuhan+Ridge+Walk+Ubud" target="_blank" rel="noopener">Campuhan Ridge Walk</a> • по желанию Monkey Forest. Обед в Ubud.</p>
@@ -395,7 +438,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Вс 16 фев — BJJ #3 <span class="tag bjj">BJJ</span></h3>
+        <h3><span class="day-title">Вс 16 фев — BJJ #3</span><span class="day-tags"><span class="tag bjj">BJJ</span></span></h3>
         <p class="date">pound4pound dojo</p>
         <p class="weather"><span class="weather-icon">🌤</span><span class="weather-temp">31°C</span><span class="weather-desc">Переменная облачность. Температура моря ~29°C — после тренировки можно на пляж.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> • <a href="https://www.google.com/maps/search/Shortcut+Cafe+Pererenan+Bali" target="_blank" rel="noopener">Shortcut Cafe</a> <span class="rating">4.9</span>.</p>
@@ -407,7 +450,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Пн 17 фев — Серф + восстановление <span class="tag surf">Серфинг</span> <span class="tag recovery">Восстановление</span></h3>
+        <h3><span class="day-title">Пн 17 фев — Серф + восстановление</span><span class="day-tags"><span class="tag surf">Серфинг</span><span class="tag recovery">Восстановление</span></span></h3>
         <p class="date">День 10. Будний день: окна связи 15:00–16:00 и 23:00–00:00.</p>
         <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">30°C</span><span class="weather-desc">Утром ясно, ветер слабый — комфортно для серфа. Днём возможны облака.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Revolver+Canggu+Bali" target="_blank" rel="noopener">Revolver</a> <span class="rating">4.6</span> • <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a>.</p>
@@ -422,7 +465,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Вт 18 фев — BJJ #4 <span class="tag bjj">BJJ</span></h3>
+        <h3><span class="day-title">Вт 18 фев — BJJ #4</span><span class="day-tags"><span class="tag bjj">BJJ</span></span></h3>
         <p class="date">theblock</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">29°C</span><span class="weather-desc">Возможны грозы во второй половине дня. Утренняя тренировка предпочтительнее.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Human+Bean+Canggu+Bali" target="_blank" rel="noopener">Human Bean</a> или <a href="https://www.google.com/maps/search/Kinoa+Pererenan+Bali" target="_blank" rel="noopener">Kinoa</a> <span class="rating">4.8</span> (рядом с залом).</p>
@@ -436,7 +479,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Ср 19 фев — Йога и лёгкий день <span class="tag recovery">Восстановление</span></h3>
+        <h3><span class="day-title">Ср 19 фев — Йога и лёгкий день</span><span class="day-tags"><span class="tag recovery">Восстановление</span></span></h3>
         <p class="date">День 12</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Возможны кратковременные дожди. Йога под крышей — в самый раз.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/The+Shady+Shack+Canggu+Bali" target="_blank" rel="noopener">The Shady Shack</a> (здоровый обед после йоги).</p>
@@ -450,7 +493,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Чт 20 фев — Последний серф <span class="tag surf">Серфинг</span></h3>
+        <h3><span class="day-title">Чт 20 фев — Последний серф</span><span class="day-tags"><span class="tag surf">Серфинг</span></span></h3>
         <p class="date">День 13</p>
         <p class="weather"><span class="weather-icon">☀️</span><span class="weather-temp">31°C</span><span class="weather-desc">Утром ясно — хороший день для последнего серфа. К вечеру возможна облачность.</span></p>
         <p class="cafe"><strong>☕ Завтрак/обед:</strong> <a href="https://www.google.com/maps/search/Rise+and+Shine+Canggu+Bali" target="_blank" rel="noopener">Rise & Shine</a> <span class="rating">4.9</span> (перед серфом).</p>
@@ -463,7 +506,7 @@
       </div>
 
       <div class="day-card">
-        <h3>Пт 21 фев — Выезд <span class="tag travel">День 14</span></h3>
+        <h3><span class="day-title">Пт 21 фев — Выезд</span><span class="day-tags"><span class="tag travel">День 14</span></span></h3>
         <p class="date">Вылет с Бали</p>
         <p class="weather"><span class="weather-icon">⛅</span><span class="weather-temp">30°C</span><span class="weather-desc">Переменная облачность. Возможен дождь — заложи время на дорогу в аэропорт.</span></p>
         <p class="cafe"><strong>☕</strong> Завтрак/кофе по дороге или в аэропорту.</p>
@@ -475,7 +518,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="acclimatization">
       <h2>Акклиматизация (первые дни)</h2>
       <div class="recovery-list">
         <div class="recovery-item">
@@ -497,7 +540,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="packing">
       <h2>Вещи в поездку</h2>
       <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem;">На Бали влажность 70–90% круглый год — конденсат, соль у океана, риск коррозии контактов и порчи документов. <strong style="color: var(--text);">Документы и технику храни в зип-пакетах</strong> (плотные с замком): паспорт, права, сим-карты, флешки, зарядки в сумке. Телефон/ноут в рюкзаке на скутере — тоже в пакете от дождя и влаги. Рекомендация распространена у путешественников и в гайдах по Бали (влаго- и пылезащита без дорогих кейсов).</p>
 
@@ -533,7 +576,7 @@
       <p style="font-size: 0.8rem; color: var(--muted); margin-top: 1rem;">Галочки вещей сохраняются в браузере. Одежду и рашгард после BJJ лучше сушить на веранде/на солнце — в номере из-за влажности сохнет долго.</p>
     </section>
 
-    <section>
+    <section id="pharmacy">
       <h2>Аптечка</h2>
       <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem;">Собери перед поездкой. Рецептурные препараты — в оригинальной упаковке, в ручной клади; при необходимости декларируй на таможне.</p>
       <ul class="pharmacy-list">
@@ -549,7 +592,7 @@
       <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem;">В Индонезии в аптеках: Oralit, Parasetamol, Loperamide, Promag, Cetirizine, Antimo, Betadine. При высокой температуре &gt;38,5°C более 48 ч, крови в стуле, сильном обезвоживании или непрекращающейся рвоте — срочно к врачу.</p>
     </section>
 
-    <section>
+    <section id="bjj">
       <h2>Залы BJJ (4 зала)</h2>
       <div class="gym-list">
         <div class="gym-item">
@@ -575,7 +618,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="massage">
       <h2>Массаж и спа (с высоким рейтингом)</h2>
       <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">Подборка по отзывам и рейтингам. Ссылки ведут на Google Maps. Бронь желательна в выходные и на популярные слоты.</p>
       <div class="gym-list">
@@ -594,7 +637,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="recovery">
       <h2>Восстановление и отдых</h2>
       <div class="recovery-list">
         <div class="recovery-item">
@@ -620,7 +663,7 @@
       </div>
     </section>
 
-    <section>
+    <section id="surf">
       <h2>Серфинг — споты рядом с Pererenan</h2>
       <ul style="color: var(--muted); font-size: 0.9rem; padding-left: 1.25rem;">
         <li><strong style="color: var(--text);">Pererenan Beach</strong> — рядом с отелем, подходит для разного уровня.</li>
