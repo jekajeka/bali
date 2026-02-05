@@ -260,6 +260,129 @@
     }
     .top-nav a:last-child { margin-right: 0; }
     .top-nav a:hover { border-color: rgba(29,155,240,0.6); }
+    .expenses-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+    .expenses-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .expenses-header h2 {
+      margin: 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      flex: 1 1 auto;
+    }
+    .expenses-header .btn {
+      flex: 0 0 auto;
+    }
+    .expenses-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: 1fr;
+    }
+    .expenses-form {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+    }
+    .expenses-form .full { grid-column: 1 / -1; }
+    .field label {
+      display: block;
+      cursor: default;
+      margin: 0 0 0.25rem 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .field input, .field select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 0.55rem 0.65rem;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .field input:focus, .field select:focus { border-color: rgba(29,155,240,0.6); }
+    .expenses-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 0.55rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .btn.primary { border-color: rgba(29,155,240,0.6); }
+    .btn.danger { border-color: rgba(255, 122, 0, 0.45); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .expenses-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    table.expenses {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+      background: var(--surface);
+    }
+    table.expenses th, table.expenses td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    table.expenses th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: rgba(36, 52, 71, 0.55);
+    }
+    table.expenses td strong { color: var(--text); }
+    table.expenses td.actions { white-space: nowrap; }
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9rem;
+      margin-right: 0.75rem;
+    }
+    .link-btn:last-child { margin-right: 0; }
+    .link-btn.danger { color: var(--orange); }
+    .expenses-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: baseline;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .expenses-total .sum { font-family: 'JetBrains Mono', monospace; color: var(--text); }
     @media (min-width: 600px) {
       body { padding: 2rem; }
       .day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
@@ -274,6 +397,7 @@
 
     <nav class="top-nav" aria-label="Навигация">
       <a href="#plan">План</a>
+      <a href="#expenses">Расходы</a>
       <a href="#work">Удалёнка</a>
       <a href="#packing">Вещи</a>
       <a href="#pharmacy">Аптечка</a>
@@ -299,6 +423,82 @@
         </div>
       </div>
       <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem;">Рекомендация по дню: серф/BJJ утром, завтрак до 15:00, <strong>15:00–16:00 — онлайн</strong>, обед/кафе/пляж, ужин с закатом, отдых, <strong>23:00–00:00 — онлайн</strong>, затем сон. Во второй слот нужен стабильный интернет в номере.</p>
+    </section>
+
+    <section id="expenses">
+      <div class="expenses-header">
+        <h2>Расходы (локальный трекер)</h2>
+        <button class="btn" type="button" id="expensesToggleBtn" aria-expanded="true" aria-controls="expensesContent">Свернуть</button>
+      </div>
+      <div id="expensesContent">
+        <div class="expenses-wrap">
+        <p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 0.75rem 0;">Добавляй траты — они сохраняются в браузере (localStorage). Суммы считаются отдельно по валютам (без конвертации).</p>
+
+        <div class="expenses-grid">
+          <div class="expenses-form" style="grid-template-columns: 1fr 1fr;">
+            <div class="field">
+              <label for="rateIdrPerUsd">Курс: 1 USD = IDR</label>
+              <input id="rateIdrPerUsd" type="number" inputmode="decimal" min="1" step="0.01" placeholder="16000">
+            </div>
+            <div class="field">
+              <label for="rateRubPerUsd">Курс: 1 USD = RUB</label>
+              <input id="rateRubPerUsd" type="number" inputmode="decimal" min="1" step="0.01" placeholder="90">
+            </div>
+            <div class="field full">
+              <span style="font-size: 0.8rem; color: var(--muted);">Итог в USD считается по этим курсам и сохраняется в браузере.</span>
+            </div>
+          </div>
+
+          <form id="expenseForm" class="expenses-form">
+            <div class="field">
+              <label for="expenseDate">Дата</label>
+              <input id="expenseDate" name="date" type="date" required>
+            </div>
+            <div class="field">
+              <label for="expenseCurrency">Валюта</label>
+              <select id="expenseCurrency" name="currency">
+                <option value="IDR" selected>IDR</option>
+                <option value="USD">USD</option>
+                <option value="RUB">RUB</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="expensePurpose">Назначение</label>
+              <input id="expensePurpose" name="purpose" type="text" maxlength="60" placeholder="Например: ужин, BJJ drop-in, бензин, массаж" required>
+            </div>
+            <div class="field">
+              <label for="expenseAmount">Сумма</label>
+              <input id="expenseAmount" name="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0" required>
+            </div>
+            <div class="expenses-actions">
+              <button class="btn primary" type="submit" id="expenseSubmitBtn">Добавить</button>
+              <button class="btn" type="button" id="expenseCancelBtn" disabled>Отменить редактирование</button>
+              <button class="btn danger" type="button" id="expenseClearBtn">Очистить всё</button>
+            </div>
+          </form>
+
+          <div class="expenses-table-wrap" role="region" aria-label="Таблица расходов">
+            <table class="expenses">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Назначение</th>
+                  <th>Сумма</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="expensesTbody"></tbody>
+            </table>
+          </div>
+
+          <div class="expenses-total">
+            <div><strong style="color: var(--text);">Итого (USD)</strong></div>
+            <div class="sum" id="expensesTotalUsd">—</div>
+            <div class="sum" id="expensesTotal" style="font-size: 0.8rem; color: var(--muted);">—</div>
+          </div>
+        </div>
+      </div>
+      </div>
     </section>
 
     <section id="plan">
@@ -725,6 +925,316 @@
       pharmacyInputs.forEach(function(inp) { inp.addEventListener('change', savePharmacy); });
       packingInputs.forEach(function(inp) { inp.addEventListener('change', savePacking); });
       load();
+    })();
+  </script>
+  <script>
+    (function() {
+      var STORAGE_KEY = 'bali-expenses-v1';
+      var RATES_KEY = 'bali-expenses-rates-v1';
+      var COLLAPSE_KEY = 'bali-expenses-collapsed-v1';
+      var form = document.getElementById('expenseForm');
+      var dateEl = document.getElementById('expenseDate');
+      var purposeEl = document.getElementById('expensePurpose');
+      var amountEl = document.getElementById('expenseAmount');
+      var currencyEl = document.getElementById('expenseCurrency');
+      var tbody = document.getElementById('expensesTbody');
+      var totalEl = document.getElementById('expensesTotal');
+      var totalUsdEl = document.getElementById('expensesTotalUsd');
+      var submitBtn = document.getElementById('expenseSubmitBtn');
+      var cancelBtn = document.getElementById('expenseCancelBtn');
+      var clearBtn = document.getElementById('expenseClearBtn');
+      var rateIdrPerUsdEl = document.getElementById('rateIdrPerUsd');
+      var rateRubPerUsdEl = document.getElementById('rateRubPerUsd');
+      var toggleBtn = document.getElementById('expensesToggleBtn');
+      var contentEl = document.getElementById('expensesContent');
+
+      if (!form || !tbody || !totalEl || !totalUsdEl) return;
+
+      var editingId = null;
+
+      function setCollapsed(collapsed) {
+        if (!contentEl || !toggleBtn) return;
+        contentEl.style.display = collapsed ? 'none' : 'block';
+        toggleBtn.textContent = collapsed ? 'Развернуть' : 'Свернуть';
+        toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+        try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch (e) {}
+      }
+
+      function initCollapseUI() {
+        if (!contentEl || !toggleBtn) return;
+        var collapsed = false;
+        try { collapsed = localStorage.getItem(COLLAPSE_KEY) === '1'; } catch (e) {}
+        setCollapsed(collapsed);
+
+        toggleBtn.addEventListener('click', function() {
+          var isCollapsed = contentEl.style.display === 'none';
+          setCollapsed(!isCollapsed);
+        });
+
+        // If user navigates to #expenses, auto-expand.
+        window.addEventListener('hashchange', function() {
+          if (location.hash === '#expenses') setCollapsed(false);
+        });
+        if (location.hash === '#expenses') setCollapsed(false);
+      }
+
+      function todayISO() {
+        var d = new Date();
+        var tz = d.getTimezoneOffset() * 60000;
+        return new Date(d.getTime() - tz).toISOString().slice(0, 10);
+      }
+
+      function safeParse(json, fallback) {
+        try {
+          var v = JSON.parse(json);
+          return v == null ? fallback : v;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function loadExpenses() {
+        return safeParse(localStorage.getItem(STORAGE_KEY), []);
+      }
+
+      function saveExpenses(items) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch (e) {}
+      }
+
+      function formatMoney(amount, currency) {
+        var num = Number(amount);
+        if (!isFinite(num)) num = 0;
+        if (currency === 'IDR') {
+          return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
+        if (currency === 'RUB') {
+          return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+        }
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(num);
+      }
+
+      function loadRates() {
+        var defaults = { idrPerUsd: 16000, rubPerUsd: 90 };
+        var v = safeParse(localStorage.getItem(RATES_KEY), defaults);
+        if (!v || typeof v !== 'object') return defaults;
+        var idr = Number(v.idrPerUsd);
+        var rub = Number(v.rubPerUsd);
+        return {
+          idrPerUsd: isFinite(idr) && idr > 0 ? idr : defaults.idrPerUsd,
+          rubPerUsd: isFinite(rub) && rub > 0 ? rub : defaults.rubPerUsd
+        };
+      }
+
+      function saveRates(rates) {
+        try { localStorage.setItem(RATES_KEY, JSON.stringify(rates)); } catch (e) {}
+      }
+
+      function totalsByCurrency(items) {
+        var totals = { IDR: 0, USD: 0, RUB: 0 };
+        items.forEach(function(x) {
+          if (!x || !x.currency) return;
+          var cur = x.currency;
+          var amt = Number(x.amount);
+          if (!isFinite(amt)) return;
+          if (cur === 'IDR' || cur === 'USD' || cur === 'RUB') totals[cur] += amt;
+        });
+        return totals;
+      }
+
+      function totalUsd(items, rates) {
+        var totals = totalsByCurrency(items);
+        var idrPerUsd = rates.idrPerUsd;
+        var rubPerUsd = rates.rubPerUsd;
+        var usd = totals.USD;
+        usd += totals.IDR / idrPerUsd;
+        usd += totals.RUB / rubPerUsd;
+        return usd;
+      }
+
+      function render() {
+        var items = loadExpenses();
+        // Sort by date desc, then createdAt desc
+        items.sort(function(a, b) {
+          var da = (a && a.date) || '';
+          var db = (b && b.date) || '';
+          if (da !== db) return da < db ? 1 : -1;
+          var ca = (a && a.createdAt) || 0;
+          var cb = (b && b.createdAt) || 0;
+          return cb - ca;
+        });
+
+        tbody.innerHTML = '';
+        if (items.length === 0) {
+          var trEmpty = document.createElement('tr');
+          trEmpty.innerHTML = '<td colspan=\"4\"><span style=\"color: var(--muted);\">Пока нет расходов.</span></td>';
+          tbody.appendChild(trEmpty);
+        } else {
+          items.forEach(function(x) {
+            var tr = document.createElement('tr');
+            var date = x.date || '';
+            var purpose = (x.purpose || '').toString();
+            var amount = formatMoney(x.amount, x.currency || 'IDR');
+            tr.innerHTML =
+              '<td><strong>' + escapeHtml(date) + '</strong></td>' +
+              '<td>' + escapeHtml(purpose) + '</td>' +
+              '<td><strong>' + escapeHtml(amount) + '</strong></td>' +
+              '<td class=\"actions\">' +
+                '<button class=\"link-btn\" data-action=\"edit\" data-id=\"' + escapeHtml(x.id) + '\">Редакт.</button>' +
+                '<button class=\"link-btn danger\" data-action=\"delete\" data-id=\"' + escapeHtml(x.id) + '\">Удалить</button>' +
+              '</td>';
+            tbody.appendChild(tr);
+          });
+        }
+
+        var totals = totalsByCurrency(items);
+        var parts = [];
+        if (totals.IDR) parts.push(formatMoney(totals.IDR, 'IDR'));
+        if (totals.USD) parts.push(formatMoney(totals.USD, 'USD'));
+        if (totals.RUB) parts.push(formatMoney(totals.RUB, 'RUB'));
+        totalEl.textContent = parts.length ? parts.join(' • ') : '—';
+
+        var rates = loadRates();
+        var usdSum = totalUsd(items, rates);
+        totalUsdEl.textContent = isFinite(usdSum) && usdSum ? formatMoney(usdSum, 'USD') : '—';
+
+        // Persist sorted order
+        saveExpenses(items);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function resetForm() {
+        editingId = null;
+        submitBtn.textContent = 'Добавить';
+        cancelBtn.disabled = true;
+        form.reset();
+        currencyEl.value = 'IDR';
+        dateEl.value = todayISO();
+        purposeEl.focus();
+      }
+
+      function upsertExpense(expense) {
+        var items = loadExpenses();
+        var idx = items.findIndex(function(x) { return x && x.id === expense.id; });
+        if (idx >= 0) items[idx] = expense;
+        else items.push(expense);
+        saveExpenses(items);
+        render();
+      }
+
+      function deleteExpense(id) {
+        var items = loadExpenses().filter(function(x) { return x && x.id !== id; });
+        saveExpenses(items);
+        render();
+      }
+
+      function getExpenseById(id) {
+        return loadExpenses().find(function(x) { return x && x.id === id; }) || null;
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var date = dateEl.value || todayISO();
+        var purpose = (purposeEl.value || '').trim();
+        var amount = Number(amountEl.value);
+        var currency = currencyEl.value || 'IDR';
+
+        if (!purpose) return;
+        if (!isFinite(amount) || amount <= 0) return;
+        if (currency !== 'IDR' && currency !== 'USD' && currency !== 'RUB') currency = 'IDR';
+
+        var now = Date.now();
+        var id = editingId || ('e_' + now + '_' + Math.random().toString(16).slice(2));
+        var prev = editingId ? getExpenseById(editingId) : null;
+
+        upsertExpense({
+          id: id,
+          date: date,
+          purpose: purpose.slice(0, 60),
+          amount: amount,
+          currency: currency,
+          createdAt: prev ? prev.createdAt : now,
+          updatedAt: now
+        });
+
+        resetForm();
+      });
+
+      cancelBtn.addEventListener('click', function() {
+        resetForm();
+      });
+
+      clearBtn.addEventListener('click', function() {
+        var ok = confirm('Очистить все расходы? Это действие нельзя отменить.');
+        if (!ok) return;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        render();
+        resetForm();
+      });
+
+      function initRatesUI() {
+        if (!rateIdrPerUsdEl || !rateRubPerUsdEl) return;
+        var rates = loadRates();
+        rateIdrPerUsdEl.value = String(rates.idrPerUsd);
+        rateRubPerUsdEl.value = String(rates.rubPerUsd);
+
+        function onChange() {
+          var idr = Number(rateIdrPerUsdEl.value);
+          var rub = Number(rateRubPerUsdEl.value);
+          var next = {
+            idrPerUsd: isFinite(idr) && idr > 0 ? idr : 16000,
+            rubPerUsd: isFinite(rub) && rub > 0 ? rub : 90
+          };
+          saveRates(next);
+          render();
+        }
+
+        rateIdrPerUsdEl.addEventListener('change', onChange);
+        rateRubPerUsdEl.addEventListener('change', onChange);
+      }
+
+      tbody.addEventListener('click', function(e) {
+        var t = e.target;
+        if (!t || !t.getAttribute) return;
+        var action = t.getAttribute('data-action');
+        var id = t.getAttribute('data-id');
+        if (!action || !id) return;
+
+        if (action === 'delete') {
+          var ok = confirm('Удалить расход?');
+          if (!ok) return;
+          deleteExpense(id);
+          if (editingId === id) resetForm();
+          return;
+        }
+
+        if (action === 'edit') {
+          var exp = getExpenseById(id);
+          if (!exp) return;
+          editingId = exp.id;
+          dateEl.value = exp.date || todayISO();
+          purposeEl.value = exp.purpose || '';
+          amountEl.value = String(exp.amount != null ? exp.amount : '');
+          currencyEl.value = exp.currency || 'IDR';
+          submitBtn.textContent = 'Сохранить';
+          cancelBtn.disabled = false;
+          purposeEl.focus();
+          return;
+        }
+      });
+
+      // Init
+      dateEl.value = todayISO();
+      initCollapseUI();
+      initRatesUI();
+      render();
     })();
   </script>
   <script>
